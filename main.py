@@ -67,7 +67,7 @@ def main():
 	font_song_mid = ImageFont.truetype('/usr/share/fonts/song/simsun', 28)
 	font_song_large = ImageFont.truetype('/usr/share/fonts/song/simsun', 40)
 	font_icon = ImageFont.truetype('/usr/share/fonts/Weather&Time', 86)
-	font_icon_mid = ImageFont.truetype('/usr/share/fonts/Weather&Time', 36)
+	font_icon_mid = ImageFont.truetype('/usr/share/fonts/Weather&Time', 40)
 	draw.ink = 256 + 256*256 + 256*256*256
 
 	# 计数君
@@ -87,10 +87,10 @@ def main():
 		# 获取室内温度
 		temp = 20
                 wet = 70
-		draw.text([200, 110], 'k', font = font_icon_mid)
-		draw.text([225, 120], str(temp) + u'℃', font = font_song_large)
-		draw.text([300, 105], 'j', font = font_icon_mid)
-		draw.text([325, 120], str(wet) + u'％', font = font_song_large)
+		draw.text([190, 120], 'k', font = font_icon_mid)
+		draw.text([220, 120], str(temp) + u'℃', font = font_song_large)
+		draw.text([300, 120], 'j', font = font_icon_mid)
+		draw.text([330, 120], str(wet) + u'%', font = font_song_large)
 
 		if(count == 0):
 			#清空下半部分显示区域
