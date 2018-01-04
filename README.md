@@ -5,7 +5,7 @@
 树莓派3B GPIO接口图
 
  | BCM | wPi |   Name  | Mode | V | Physical ||Physical | V | Mode | Name    | wPi | BCM |
- |-|-|-|-|-|-|-|-|-|-|-|-|-|
+ |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
  |     |     |    3.3v |      |   |  1 || 2  |   |      | 5v      |     |     |
  |   2 |   8 |   SDA.1 |   IN | 1 |  3 || 4  |   |      | 5v      |     |     |
  |   3 |   9 |   SCL.1 |   IN | 1 |  5 || 6  |   |      | 0v      |     |     |
@@ -27,4 +27,41 @@
  |  26 |  25 | GPIO.25 |   IN | 0 | 37 || 38 | 0 | IN   | GPIO.28 | 28  | 20  |
  |     |     |      0v |      |   | 39 || 40 | 0 | IN   | GPIO.29 | 29  | 21  |
 
+与屏幕的连接
 
+ |E-Paper Display | Raspberry Pi |
+ |:-:|:-:|
+ | VCC | 3.3 |
+ | GND | GND |
+ | DIN | MOSI |
+ | CLK | SCLK |
+ | CS | 24 (Physical, BCM: CE0, 8) |
+ | D/C | 22 (Physical, BCM: 25) |
+ | RES | 11 (Physical, BCM: 17) |
+ | BUSY| 18 (Physical, BCM: 24) |
+ 
+ 与DHT22的连接
+ 1-wire ——> 
+ 
+ ## Python库
+ 
+ - RPi.GPIO
+ - spidev
+ - requests
+ - lxml
+ - Python Image Library(pillow)
+ 
+ 对于DHT22，使用厂商开源的驱动
+ ```
+ git clone https://github.com/adafruit/Adafruit_Python_DHT.git  
+ cd Adafruit_Python_DHT  
+ sudo python ./setup.py install 
+ ```
+ 
+ ## 使用方法
+ 1. 接好线
+ 2. 安装必须的环境和库
+ 3. 运行main.py
+ 
+ ## 实现效果
+ 
