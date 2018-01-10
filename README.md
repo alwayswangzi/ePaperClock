@@ -41,7 +41,12 @@
  | BUSY| 18 (Physical, BCM: 24) |
  
  与DHT22的连接
- 1-wire ——> 
+ 
+ |DHT22|Raspberry Pi|
+ |:-:|:-:|
+ |DOUT|GPIO7(BCM4)|
+ 
+ DHT22 DOUT引脚也可以接到其他gpio脚上，不过要相应的修改main.py中Adafruit_DHT.read函数第二个参数
  
  ## Python库
  
