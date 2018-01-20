@@ -1,5 +1,8 @@
 # ePaperClock
-树莓派+DHT22温湿度传感器+微雪4.3寸电子墨水屏搭建的天气时钟
+使用树莓派 + DHT22温湿度传感器 + 微雪4.3寸电子墨水屏搭建的天气时钟，参考了[](https://github.com/emptyhua/epaper_clock)的创意。
+
+ ## 效果图
+ ![效果图](./IMG.jpg)
 
 ## 硬件连接
 树莓派3B GPIO接口图
@@ -49,6 +52,7 @@
  DHT22 DOUT引脚也可以接到其他gpio脚上，不过要相应的修改main.py中Adafruit_DHT.read函数第二个参数
  
  ## Python库
+ 安装以下库文件
  
  - RPi.GPIO
  - spidev
@@ -56,7 +60,7 @@
  - lxml
  - Python Image Library(pillow)
  
- 对于DHT22，使用厂商开源的驱动
+ DHT22，安装厂商开源的驱动
  ```
  git clone https://github.com/adafruit/Adafruit_Python_DHT.git  
  cd Adafruit_Python_DHT  
@@ -68,5 +72,6 @@
  2. 安装必须的环境和库
  3. 运行main.py
  
- ## 效果图
- ![效果图](./IMG.jpg)
+ ## 常见问题
+ 1. 天气源失效，尝试换抓取页面或天气API
+ 2. 网络连接问题
