@@ -7,9 +7,12 @@ from PIL import ImageDraw
 from PIL import ImageFont
 from get_datetime import get_datetime
 from get_weather import get_weather
+import Adafruit_DHT
 import time
 import os
 import sys
+import requests
+import json
 
 def str2icon(str):
 	icon = None
@@ -51,6 +54,13 @@ def str2icon(str):
 		icon = 'A'
 	
 	return icon
+	
+def get_instance_weather():
+#s:'weather', 'warn', 'station', 'wind', 'publish_time'
+#weather:'info', 'temperatureDiff', 'temperature', 'airpressure', 'icomfort', 'rain', 'humidity', 'img', 'rcomfort', 'feelst
+	r = requests.get('http://www.nmc.gov.cn/f/rest/real/58238')
+	s = json.loads(r.text)
+	return s
 
 def main():
 	# 电子墨水屏初始化
@@ -65,6 +75,7 @@ def main():
 	font_calibril_super = ImageFont.truetype('/usr/share/fonts/song/calibril', 90)
 	font_song_small = ImageFont.truetype('/usr/share/fonts/song/simsun', 24)
 	font_song_mid = ImageFont.truetype('/usr/share/fonts/song/simsun', 28)
+	font_song_big = ImageFont.truetype('/usr/share/fonts/song/simsun', 32)
 	font_song_large = ImageFont.truetype('/usr/share/fonts/song/simsun', 40)
 	font_icon = ImageFont.truetype('/usr/share/fonts/Weather&Time', 86)
 	font_icon_mid = ImageFont.truetype('/usr/share/fonts/Weather&Time', 40)
@@ -72,10 +83,12 @@ def main():
 
 	# 计数君
 	count = 0
+        isfailed = True
 
 	while True:
 		# 清空上半部分显示区域
 		draw.rectangle([0, 0, 399, 98], fill = 'white')
+		draw.rectangle([200, 102, 399, 159], fill = 'white')
 		
 		# 获取日期时间
 		datetime = get_datetime()
@@ -85,19 +98,28 @@ def main():
 		draw.text([250, 70], u'农历' + '', font = font_song_small)
 		
 		# 获取室内温度
-		temp = 20
-                wet = 70
+		wet_indoor, temp_indoor = Adafruit_DHT.read(Adafruit_DHT.DHT22, 4)
 		draw.text([190, 120], 'k', font = font_icon_mid)
-		draw.text([220, 120], str(temp) + u'℃', font = font_song_large)
+                if temp_indoor is not None :
+		        draw.text([220, 120], str(int(temp_indoor)) + u'℃', font = font_song_large)
 		draw.text([300, 120], 'j', font = font_icon_mid)
-		draw.text([330, 120], str(wet) + u'%', font = font_song_large)
+                if wet_indoor is not None :
+                        draw.text([330, 120], str(int(wet_indoor)) + u'%', font = font_song_large)
+		
 
-		if(count == 0):
+		if count == 0 :
 			#清空下半部分显示区域
 			draw.rectangle([0, 102, 199, 299], fill = 'white')
-			draw.rectangle([200, 230, 399, 299], fill = 'white')
+			draw.rectangle([200, 160, 399, 299], fill = 'white')
 			
 			try:
+				# 获取室外温度
+				s = get_instance_weather()
+				temp_outdoor = int(s['weather']['temperature'])
+				wet_outdoor = int(s['weather']['humidity'])
+				draw.text([220, 160], str(temp_outdoor) + u'℃', font = font_song_big)
+				draw.text([330, 160], str(wet_outdoor) + u'%', font = font_song_big)
+				
 				# 获取天气状况
 				weather = get_weather()
 				draw.text([100, 130], weather['city_name'], font = font_song_small)
@@ -106,7 +128,10 @@ def main():
 				draw.text([10, 110], str2icon(weather['day_weather']), font = font_icon)
 				draw.line([53, 240, 53, 290], fill = 0)
 				if weather.has_key('night_weather'):
-					draw.text([20, 200], weather['day_weather'] + u'/' + weather['night_weather'], font = font_song_mid)
+                                        if weather['day_weather'] == weather['night_weather'] :
+					        draw.text([20, 200], weather['day_weather'], font = font_song_mid)
+                                        else:
+					        draw.text([20, 200], weather['day_weather'] + u'/' + weather['night_weather'], font = font_song_mid)
 				else:
 					draw.text([20, 200], weather['day_weather'], font = font_song_mid)
 				if weather.has_key('night_temp'):
@@ -117,15 +142,19 @@ def main():
 				draw.line([293, 240, 293, 290], fill = 0)
 				draw.text([240, 240], u'明日 ' + weather['tomorrow_weather'], font = font_song_small)
 				draw.text([240, 270], u'天气 ' + weather['tomorrow_temp'], font = font_song_small)
+                                isfailed = False
+
 			except Exception, e:
 				print e
 				draw.rectangle([0, 102, 399, 299], fill = 'white')
 				draw.text([0, 200], u'数据获取失败！请检查网络连接！', font = font_song_small)
-				epd.display_frame(epd.get_frame_buffer(image))
-				#sys.exit(1)
+                                isfailed = True
+				#epd.display_frame(epd.get_frame_buffer(image))
 
-		++count
-		if(count == 20):
+                if isfailed == False :
+		    count = count + 1
+
+		if count == 20 :
 			count = 0
 
 		epd.display_frame(epd.get_frame_buffer(image))
