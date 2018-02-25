@@ -1,5 +1,5 @@
 # ePaperClock
-使用树莓派 + DHT22温湿度传感器 + 微雪4.3寸电子墨水屏搭建的天气时钟，参考了[](https://github.com/emptyhua/epaper_clock)的创意。
+使用树莓派 + DHT22温湿度传感器 + 微雪4.3寸电子墨水屏搭建的天气时钟，参考了https://github.com/emptyhua/epaper_clock 的创意。
 
  ## 效果图
  ![效果图](./IMG.jpg)
