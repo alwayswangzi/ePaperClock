@@ -72,6 +72,25 @@
  2. 安装必须的环境和库
  3. 运行main.py
  
+ ### 如何脚本设置开机启动？
+ 
+ 方法一：在/etc/rc.local中添加执行脚本。不太稳定，经常会出现各种奇怪的情况。
+ 方法二：使用systemd（推荐）
+ 1. 编写epaper_clock.service脚本
+ ```
+[Unit]
+Description=epaper_clock
+[Service]
+Type=oneshot
+ExecStart=#####(path of your own script)#######
+[Install]
+WantedBy=multi-user.target
+ ```
+ 2. 将脚本拷贝到/etc/systemd/system/multi-user.target.wants/目录下，并修改文件执行权限：chmod +x
+ 3. 启动服务 systemctl start epaper_clock.service
+ 4. 查看服务状态 systemctl status epaper_clock.service
+ 5. 停止服务 systemctl stop epaper_clock.service
+ 
  ## 常见问题
  1. 天气源失效，尝试换抓取页面或天气API
  2. 网络连接问题
