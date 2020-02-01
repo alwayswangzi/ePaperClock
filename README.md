@@ -1,11 +1,13 @@
-# ePaperClock
-使用树莓派 + DHT22温湿度传感器 + 微雪4.3寸电子墨水屏搭建的天气时钟，参考了https://github.com/emptyhua/epaper_clock 的创意。
+# ePaper Weather Clock
+使用树莓派 + DHT22温湿度传感器 + 微雪4.3寸电子墨水屏搭建的天气时钟，参考了 https://github.com/emptyhua/epaper_clock 的创意。
+Use RaspberryPi, DHT22 humidity & temperature sensor, and WeShare 4.3 inch e-Paper screen build weather alarm clock, which is refered by https://github.com/emptyhua/epaper_clock
 
- ## 效果图
+ ## 效果图 Finished Product
  ![效果图](./IMG.jpg)
 
-## 硬件连接
+## 硬件连接 HardWare Connection
 树莓派3B GPIO接口图
+RaspberryPi 3B's GPIO
 
  | BCM | wPi |   Name  | Mode | V | Physical ||Physical | V | Mode | Name    | wPi | BCM |
  |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
@@ -30,9 +32,10 @@
  |  26 |  25 | GPIO.25 |   IN | 0 | 37 || 38 | 0 | IN   | GPIO.28 | 28  | 20  |
  |     |     |      0v |      |   | 39 || 40 | 0 | IN   | GPIO.29 | 29  | 21  |
 
-与屏幕的连接
+与4.3寸电子墨水屏幕的连接
+Connect to e-Paper screen
 
- |E-Paper Display | Raspberry Pi |
+ |E-Paper Screen | Raspberry Pi |
  |:-:|:-:|
  | VCC | 3.3 |
  | GND | GND |
@@ -43,16 +46,19 @@
  | RES | 11 (Physical, BCM: 17) |
  | BUSY| 18 (Physical, BCM: 24) |
  
- 与DHT22的连接
+ 与DHT-22传感器的连接
+ Connect to DHT-22 sensor
  
  |DHT22|Raspberry Pi|
  |:-:|:-:|
  |DOUT|GPIO7(BCM4)|
  
- DHT22 DOUT引脚也可以接到其他gpio脚上，不过要相应的修改main.py中Adafruit_DHT.read函数第二个参数
+ DHT-22 DOUT引脚也可以接到其他GPIO脚上，不过要相应的修改main.py中Adafruit_DHT.read函数第二个参数
+ DHT-22 DOUT pin can also connect to RaspberryPi other GPIO, but need to modify main.py second parameter of Adafruit_DHT.read function.
  
- ## Python库
+ ## Python库 Python Library
  安装以下库文件
+ Install the following python library
  
  - RPi.GPIO
  - spidev
@@ -61,22 +67,25 @@
  - Python Image Library(pillow)
  
  DHT22，安装厂商开源的驱动
+ Install the diver by DHT-22 manufacturer
  ```
  git clone https://github.com/adafruit/Adafruit_Python_DHT.git  
  cd Adafruit_Python_DHT  
  sudo python ./setup.py install 
  ```
  
- ## 使用方法
- 1. 接好线
- 2. 安装必须的环境和库
- 3. 运行main.py
+ ## 使用方法 Usage
+ 1. 接好线 Connect all wires
+ 2. 安装必须的环境和库 Install all libraries
+ 3. 运行main.py Run main.py
  
- ### 如何脚本设置开机启动？
+ ### 如何脚本设置开机启动？How to set auto start?
  
  方法一：在/etc/rc.local中添加执行脚本。不太稳定，经常会出现各种奇怪的情况。
  方法二：使用systemd（推荐）
- 1. 编写epaper_clock.service脚本
+ Added script in /etc/rc.local, which may not stable, or use systemd(recommend), following these steps:
+ 
+ 1. 编写epaper_clock.service脚本 write epaper_clock.service script
  ```
 [Unit]
 Description=epaper_clock
@@ -91,6 +100,6 @@ WantedBy=multi-user.target
  4. 查看服务状态 systemctl status epaper_clock.service
  5. 停止服务 systemctl stop epaper_clock.service
  
- ## 常见问题
- 1. 天气源失效，尝试换抓取页面或天气API
- 2. 网络连接问题
+ ## 常见问题 FAQ
+ 1. 天气源失效，尝试换抓取页面或天气API weather source may invalid, try to scrach other weahter source
+ 2. 网络连接问题 network problem
