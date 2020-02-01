@@ -73,7 +73,6 @@ You can connect DHT-22's DOUT to RaspberryPi's other GPIO, as long as modify the
  3. Run main.py
  
  ### How to set auto-start?
- 方法二：使用systemd（推荐）
  Added script in /etc/rc.local(may not stable), or use systemd(recommend), following these steps:
  
  1. Write a epaper_clock.service script
